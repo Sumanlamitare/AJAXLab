@@ -23,18 +23,23 @@ const API_KEY =
  * This function should execute immediately.
  */
 async function initialLoad() {
+  try {
+    const response = await fetch("https://api.thecatapi.com/v1/breeds");
 
-  try{
-  const response = await fetch("https://api.thecatapi.com/v1/breeds");
-
-  const data = await response.json();
-  // console.log(data);
-
-  for (let i = 0; i <= data.length; i++) {
-    console.log(data[i].name);
+    if (!response.ok) {
+      throw new Error("Failed to fetch breeds");
+    }
+    breed = await response.json();
+    for (let i = 0; i <= breed.length; i++) {
+      const option = document.createElement("option");
+      option.value = breed.id;
+      option.textContent = breed.name;
+      breedSelect.appendChild(option);
+    }
+  } catch (error) {
+    console.log(error);
   }
 }
-
 initialLoad();
 
 /**
